@@ -1,0 +1,5 @@
+// delete all elements that have name="Holberton school" from collection school
+
+db.school.deleteMany(
+    {name: "Holberton school"}
+)
