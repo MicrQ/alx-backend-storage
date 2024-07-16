@@ -1,0 +1,3 @@
+// a mongodb script that lists all available databases.
+
+show dbs
