@@ -1,0 +1,3 @@
+// a mongodb script that creates or uses a database named my_db
+
+use my_db
