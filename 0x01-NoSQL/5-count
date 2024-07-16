@@ -1,0 +1,3 @@
+// displays the number of documents available in school collection
+
+db.school.find().count()
