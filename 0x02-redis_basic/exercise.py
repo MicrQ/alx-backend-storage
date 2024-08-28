@@ -9,13 +9,10 @@ from functools import wraps
 def count_calls(method: callable) -> callable:
     """ counts number of calls to the Cache class methods """
     @wraps(method)
-    def wrapper(self, *args, **kwargs):
+    def wrapper(self, *args, **kwargs) -> Union[str, bytes, int, float]:
         """ mock method """
         key = method.__qualname__
-        if key not in self._redis.keys():
-            self._redis.set(key, 1)
-        else:
-            self._redis.incr(key)
+        self._redis.incr(key)
         return method(self, *args, **kwargs)
 
     return wrapper
