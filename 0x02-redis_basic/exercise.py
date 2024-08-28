@@ -12,7 +12,10 @@ def count_calls(method: callable) -> callable:
     def wrapper(self, *args, **kwargs):
         """ mock method """
         key = method.__qualname__
-        self._redis.incr(key)
+        if key not in self._redis.keys():
+            self._redis.set(key, 1)
+        else:
+            self._redis.incr(key)
         return method(self, *args, **kwargs)
 
     return wrapper
