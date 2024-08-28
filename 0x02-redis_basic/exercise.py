@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""  """
+""" redis implemetation in python """
 import redis
 from typing import Union, Callable
 import uuid
