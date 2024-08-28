@@ -17,18 +17,33 @@ def count_calls(method: Callable) -> Callable:
 
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """ stores input and output history of particular method """
-    key = method.__qualname__
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         """ mock method """
+        key = method.__qualname__
         self._redis.rpush(key + ":inputs", str(args))
         output = method(self, *args, **kwargs)
         self._redis.rpush(key + ":outputs", output)
 
         return output
     return wrapper
+
+
+def replay(method: Callable) -> None:
+    """ displays the history of calls of a particular method """
+    key = method.__qualname__
+    r = redis.Redis()
+    inputs = r.lrange(key + ":inputs", 0, -1)
+    outputs = r.lrange(key + ":outputs", 0, -1)
+
+    io = zip(inputs, outputs)
+    print("{} was called {} times:".format(key, len(inputs)))
+    for i, o in io:
+        print("{}(*{}) -> {}".format(
+            key, i.decode('utf-8'), o.decode('utf-8')))
 
 
 class Cache:
