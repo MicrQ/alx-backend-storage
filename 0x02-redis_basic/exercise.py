@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """  """
 import redis
-from typing import Union
+from typing import Union, Callable
 import uuid
 from functools import wraps
 
 
-def count_calls(method: callable) -> callable:
+def count_calls(method: Callable) -> Callable:
     """ counts number of calls to the Cache class methods """
     @wraps(method)
-    def wrapper(self, *args, **kwargs) -> Union[str, bytes, int, float]:
+    def wrapper(self, *args, **kwargs):
         """ mock method """
         key = method.__qualname__
         self._redis.incr(key)
