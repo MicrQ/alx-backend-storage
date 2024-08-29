@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """ Implementing an expiring web cache and tracker """
 import requests
+import redis
+
+
+cache = redis.Redis()
 
 
 def get_page(url: str) -> str:
@@ -8,4 +12,5 @@ def get_page(url: str) -> str:
     Return:
         The HTML content
     """
+    cache.setex('count:' + url, 10)
     return requests.get(url).text
