@@ -15,7 +15,13 @@ def get_page(url: str) -> str:
     Return:
         The HTML content
     """
-    return requests.get(url).text
+    res = cache.get(url)
+    if res:
+        return res
+    else:
+        res = requests.get(url).text
+        cache.setex(url, 10, res)
+    return res
 
 
 def count_calls(fn: Callable) -> Callable:
@@ -25,6 +31,6 @@ def count_calls(fn: Callable) -> Callable:
         """ moke function """
         key = 'count:' + args[0]
         cache.incr(key)
-        cache.setex(key, 10, args[0])
-        return fn(*args, **kwargs)
+        result = fn(*args, **kwargs)
+        return result
     return wrapper
