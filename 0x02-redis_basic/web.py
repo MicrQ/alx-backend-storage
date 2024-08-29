@@ -15,16 +15,16 @@ def get_page(url: str) -> str:
     Return:
         The HTML content
     """
-    cache.setex('count:' + url, 10)
     return requests.get(url).text
+
 
 def count_calls(fn: Callable) -> Callable:
     """ counts how many time a function is called """
     @wraps(fn)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> str:
         """ moke function """
         key = 'count:' + args[0]
         cache.incr(key)
-        cache.setex(key, 10)
+        cache.setex(key, 10, args[0])
         return fn(*args, **kwargs)
     return wrapper
